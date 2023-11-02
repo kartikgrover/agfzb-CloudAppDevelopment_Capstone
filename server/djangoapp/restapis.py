@@ -39,17 +39,18 @@ def get_request(url, **kwargs):
 
 
 # Create a `post_request` to make HTTP POST requests
-def post_request(url, payload, **kwargs):
-    print(kwargs)
-    print("POST to {} ".format(url))
-    print(payload)
-    response = requests.post(url, params=kwargs, json=payload)
-    status_code = response.status_code
-    print("With status {} ".format(status_code))
-    json_data = json.loads(response.text)
-    return json_data
-
-
+def post_request(url, json_payload, **kwargs):
+    print(json_payload)
+    print("POST from {} ".format(url))
+    try:
+        response = requests.post(url, params=kwargs, json=json_payload)
+        status_code = response.status_code
+        print("With status {} ".format(status_code))
+        json_data = json.loads(response.text)
+        print(json_data)
+        return json_data
+    except:
+        print("Network exception occurred")
 
 
 # Create a get_dealers_from_cf method to get dealers from a cloud function
@@ -83,7 +84,6 @@ def get_dealer_reviews_from_cf(url, **kwargs):
         json_result = get_request(url, id=id)
     else:
         json_result = get_request(url)
-    print(json_result, "96")
     if json_result:
         reviews = json_result
         for dealer_review in reviews:
@@ -119,8 +119,6 @@ def get_dealer_by_id_from_cf(url, id):
     if json_result:
         # Get the row list in JSON as dealers
         dealers = json_result
-        print(dealers,"63")
-
         # For each dealer object
         for dealer in dealers:
             # Get its content in `doc` object

@@ -59,9 +59,9 @@ def login_request(request):
             return redirect('/djangoapp/')
         else:
             # If not, return to login page again
-            return render(request, 'djangoapp/user_login.html', context)
+            return render(request, 'djangoapp/login.html', context)
     else:
-        return render(request, 'djangoapp/user_login.html', context)
+        return render(request, 'djangoapp/login.html', context)
 
 
 
@@ -139,7 +139,7 @@ def get_dealer_details(request, id):
         
         return render(request, 'djangoapp/dealer_details.html', context)
 
-# Create a `add_review` view to submit a review
+
 def add_review(request, id):
     context = {}
     dealer_url = "https://groverkartik-3000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/dealerships/get"
@@ -159,25 +159,25 @@ def add_review(request, id):
             payload = dict()
             car_id = request.POST["car"]
             car = CarModel.objects.get(pk=car_id)
-            payload["time"] = datetime.utcnow().isoformat()
+            # payload["time"] = datetime.utcnow().isoformat()
+            payload["id"] = "2222"
             payload["name"] = username
             payload["dealership"] = id
-            payload["id"] = id
             payload["review"] = request.POST["content"]
             payload["purchase"] = False
             if "purchasecheck" in request.POST:
                 if request.POST["purchasecheck"] == 'on':
                     payload["purchase"] = True
             payload["purchase_date"] = request.POST["purchasedate"]
-            payload["car_make"] = car.make.name
+            payload["car_make"] = car.car_make.name
             payload["car_model"] = car.name
+            payload["car_year"] = int(car.year.strftime("%Y"))
             
 
             new_payload = {}
             new_payload["review"] = payload
-            review_post_url = "https://groverkartik-3000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/api/post_review"            
+            review_post_url = "https://groverkartik-5000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/api/post_review"            
             post_request(review_post_url, new_payload, id=id)
         return redirect("djangoapp:dealer_details", id=id)
-
 
 
