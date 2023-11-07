@@ -10,7 +10,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 def get_request(url, **kwargs):
-    print(kwargs)
     print("GET from {} ".format(url))
     try:
         # Call get method of requests library with URL and parameters
@@ -26,22 +25,16 @@ def get_request(url, **kwargs):
 
 
 
+
+
 def post_request(url, json_payload, **kwargs):
-    print(json_payload)
-    print("POST from {} ".format(url))
-    try:
-        response = requests.post(url, params=kwargs, json=json_payload)
-        status_code = response.status_code
-        print("With status {} ".format(status_code))
-        json_data = json.loads(response.text)
-        print(json_data)
-        return json_data
-    except:
-        print("Network exception occurred")
+    url =  "https://groverkartik-5000.theiadocker-3-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/api/post_review"
+    response = requests.post(url, params=kwargs, json=json_payload)
+    return response
 
 
 
-# Create a get_dealers_from_cf method to get dealers from a cloud function
+
 def get_dealers_from_cf(url, **kwargs):
     results = []
     # Call get_request with a URL parameter
